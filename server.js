@@ -38,6 +38,34 @@ app.get("/workexperience", (req, res) => {
     });
 });
 
+//Post-route
+app.post("/workexperience", (req, res) => {
+    const { companyname, jobtitle, location } = req.body;
+
+    if (!companyname || !jobtitle || !location) {
+        res.status(400).json({ error: "Alla fält måste fyllas i!" });
+        return;
+    }
+
+    const workexperience = `
+        INSERT INTO workexperience (companyname, jobtitle, location)
+        VALUES (?, ?, ?)
+    `;
+
+    connection.query(workexperience, [companyname, jobtitle, location], (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: "Databas error" });
+            return;
+        }
+    });
+
+    res.status(201).json({
+        message: "Arbetserfarenhet tillagd",
+        id: result.insertId
+    });
+});
+
 
 // Start applikation
 app.listen(port, () => {
