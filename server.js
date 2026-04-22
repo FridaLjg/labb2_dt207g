@@ -31,7 +31,7 @@ app.get("/workexperience", (req, res) => {
 
     connection.query(workexperience, (err, results) => {
         if (err) {
-            res.status(500).json({ error: "Databas error" });
+            res.status(500).json({ error: "Databas fel!" });
             return;
         }
         res.json(results);
@@ -55,17 +55,44 @@ app.post("/workexperience", (req, res) => {
     connection.query(workexperience, [companyname, jobtitle, location], (err, result) => {
         if (err) {
             console.error(err);
-            res.status(500).json({ error: "Databas error" });
+            res.status(500).json({ error: "Databas fel!" });
             return;
         }
     });
 
     res.status(201).json({
-        message: "Arbetserfarenhet tillagd",
+        message: "Arbetserfarenhet sparad!",
         id: result.insertId
     });
 });
 
+//Delelte
+app.delete("/workexperience", (req, res) => {
+
+const { id } = req.params;
+
+    const deleteQuery = "DELETE FROM workexperience WHERE id = ?";
+
+    connection.query(deleteQuery, [id], (err, result) => {
+        const deleteResult = result;
+
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: "Databas fel!" });
+            return;
+        }
+
+        if (deleteResult.affectedRows === 0) {
+            res.status(404).json({ error: "Ingen post hittades" });
+            return;
+        }
+
+        res.json({
+            message: "Arbetserfarenhet har tagits bort!",
+            affectedRows: deleteResult.affectedRows
+        });
+    });
+});
 
 // Start applikation
 app.listen(port, () => {
