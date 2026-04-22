@@ -10,7 +10,7 @@ const connection = mysql.createConnection({
 
 connection.connect((err => {
     if (err) {
-        consoole.error("Connection failed: " + err);
+        console.error("Connection failed: " + err);
         return;
     }
 

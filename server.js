@@ -1,6 +1,7 @@
 const mysql = require("mysql");
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const port = 3000;
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
@@ -16,9 +17,29 @@ const connection = mysql.createConnection({
 
 connection.connect((err => {
     if (err) {
-        consoole.error("Connection failed: " + err);
+        console.error("Connection failed: " + err);
         return;
     }
 
     console.log("Connected to MySQL!");
 }));
+
+
+//Get-route
+app.get("/workexperience", (req, res) => {
+    const workexperience = "SELECT * FROM workexperience";
+
+    connection.query(workexperience, (err, results) => {
+        if (err) {
+            res.status(500).json({ error: "Databas error" });
+            return;
+        }
+        res.json(results);
+    });
+});
+
+
+// Start applikation
+app.listen(port, () => {
+    console.log("Servern har startat på port:" + port);
+});
