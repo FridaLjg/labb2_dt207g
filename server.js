@@ -66,10 +66,34 @@ app.post("/workexperience", (req, res) => {
     });
 });
 
-//Delelte
-app.delete("/workexperience", (req, res) => {
+//Put-route
+app.put("/workexperience/:id", (req, res) => {
+    const { id } = req.params;
+    const { companyname, jobtitle, location } = req.body;
 
-const { id } = req.params;
+    if (!companyname || !jobtitle || !location) {
+        return res.status(400).json({ error: "Alla fält måste fyllas i!" });
+    }
+
+    const sql = `
+        UPDATE workexperience
+        SET companyname = ?, jobtitle = ?, location = ?
+        WHERE id = ?
+    `;
+
+     connection.query(sql, [id, companyname, jobtitle, location], (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: "Databas fel!" });
+            return;
+        }
+    });
+})
+
+//Delelte
+app.delete("/workexperience(:id", (req, res) => {
+
+    const { id } = req.params;
 
     const deleteQuery = "DELETE FROM workexperience WHERE id = ?";
 
@@ -83,7 +107,7 @@ const { id } = req.params;
         }
 
         if (deleteResult.affectedRows === 0) {
-            res.status(404).json({ error: "Ingen post hittades" });
+            res.status(404).json({ error: "Inget hittades" });
             return;
         }
 
