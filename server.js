@@ -5,6 +5,7 @@ const cors = require("cors");
 const port = 3000;
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.set("view engine", "ejs");
 
 // Anslutningsinställningar
@@ -58,11 +59,11 @@ app.post("/workexperience", (req, res) => {
             res.status(500).json({ error: "Databas fel!" });
             return;
         }
-    });
 
-    res.status(201).json({
-        message: "Arbetserfarenhet sparad!",
-        id: result.insertId
+        res.status(201).json({
+            message: "Arbetserfarenhet sparad!",
+            id: result.insertId
+        });
     });
 });
 
@@ -81,17 +82,19 @@ app.put("/workexperience/:id", (req, res) => {
         WHERE id = ?
     `;
 
-     connection.query(sql, [id, companyname, jobtitle, location], (err, result) => {
+    connection.query(sql, [companyname, jobtitle, location, id], (err, result) => {
         if (err) {
             console.error(err);
             res.status(500).json({ error: "Databas fel!" });
             return;
         }
+
+        res.json({ message: "Arbetserfarenhet uppdaterad!" });
     });
 })
 
 //Delelte
-app.delete("/workexperience(:id", (req, res) => {
+app.delete("/workexperience/:id", (req, res) => {
 
     const { id } = req.params;
 
