@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const port = 3000;
+app.use(cors());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -93,7 +94,7 @@ app.put("/workexperience/:id", (req, res) => {
     });
 })
 
-//Delelte
+//Delete
 app.delete("/workexperience/:id", (req, res) => {
 
     const { id } = req.params;
