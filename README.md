@@ -19,7 +19,7 @@ Fält:
 - jobtitle (VARCHAR(100), NOT NULL)
 - location (VARCHAR(100), NOT NULL)
 
-##Användning
+## Användning
 Nedan finns beskrivet hur man nå APIet på olika vis:
 
 |Metod  |Ändpunkt     |Beskrivning                                                                           |
